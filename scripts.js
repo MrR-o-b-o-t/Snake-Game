@@ -5,6 +5,9 @@ let snakeDirection;
 document.addEventListener("keydown", moveSnakeKeys, false)
 let appleX;
 let appleY;
+let appleIsPresent;
+let appleArray = [];
+let score = 0;
 
 class Snake {
     constructor() {
@@ -49,6 +52,11 @@ function animate() {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     snake.updateSnake()
     createApple()
+    ctx.fillStyle = 'red';
+    ctx.fillRect(appleArray[0], appleArray[1], 15, 15)
+    ctx.fill()
+    updateScore()
+    console.log(score)
 }
 
 animate()
@@ -74,17 +82,31 @@ function moveSnakeKeys(e) {
 // check to see if apple exists
 // if true then don't run
 // if snakex or snakey is equal to applex or appley add 1 point and remove old apple, create new apple
-
 function createApple() {
-    appleX = Math.floor((Math.random() * canvas.width) - 15)
-    appleY = Math.floor((Math.random() * canvas.height) - 15)
-    ctx.fillStyle = 'red';
-    ctx.fillRect(appleX, appleY, 15, 15)
-    ctx.fill()
+    if (appleIsPresent == undefined) {
+        appleX = Math.floor((Math.random() * (canvas.width - 20)))
+        appleY = Math.floor((Math.random() * (canvas.height - 20)))
+        appleArray.push(appleX, appleY)
+        appleIsPresent = 1
+    }
 }
 
-// if snake x and y == apple x and y 
+// if snake x || y == apple x || y 
 // add 1 point 
-// remove that apple
+// remove that apple (change appleIsPresent to 0)
 // call createApple function
 // draw new apple to canvas
+
+function updateScore() {
+    if (snake.x < appleX + 15 &&
+        snake.x + 15 > appleX &&
+        snake.y < appleY + 15 &&
+        snake.y + 15 > appleY) {
+        ctx.clearRect(appleX, appleY, 15, 15)
+        appleArray.length = 0
+        appleIsPresent = null
+        score = score + 1
+        document.getElementById('score').innerText = score
+    }
+}
+
