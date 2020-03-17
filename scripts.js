@@ -1,13 +1,16 @@
 
 let canvas = document.getElementById('gameCanvas')
 let ctx = canvas.getContext('2d')
-let snakeDirection;
+let snakeDirection
 document.addEventListener("keydown", moveSnakeKeys, false)
-let appleX;
-let appleY;
-let appleIsPresent;
-let appleArray = [];
-let score = 0;
+let appleX
+let appleY
+let score = 0
+let snakeBody = [
+    { x: 50, y: 25, color: 'green' }
+]
+
+createApple()
 
 class Snake {
     constructor() {
@@ -51,12 +54,10 @@ function animate() {
     ctx.fillStyle = 'black'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     snake.updateSnake()
-    createApple()
     ctx.fillStyle = 'red';
-    ctx.fillRect(appleArray[0], appleArray[1], 15, 15)
+    ctx.fillRect(appleX, appleY, 15, 15)
     ctx.fill()
     updateScore()
-    console.log(score)
 }
 
 animate()
@@ -77,36 +78,26 @@ function moveSnakeKeys(e) {
     }
 }
 
-// Math.random for generating x and y cordinate for apple
-// draw apple on canvas using these cordinates
-// check to see if apple exists
-// if true then don't run
-// if snakex or snakey is equal to applex or appley add 1 point and remove old apple, create new apple
 function createApple() {
-    if (appleIsPresent == undefined) {
-        appleX = Math.floor((Math.random() * (canvas.width - 20)))
-        appleY = Math.floor((Math.random() * (canvas.height - 20)))
-        appleArray.push(appleX, appleY)
-        appleIsPresent = 1
-    }
+    appleX = Math.floor((Math.random() * (canvas.width - 20)))
+    appleY = Math.floor((Math.random() * (canvas.height - 20)))
 }
-
-// if snake x || y == apple x || y 
-// add 1 point 
-// remove that apple (change appleIsPresent to 0)
-// call createApple function
-// draw new apple to canvas
 
 function updateScore() {
     if (snake.x < appleX + 15 &&
         snake.x + 15 > appleX &&
         snake.y < appleY + 15 &&
-        snake.y + 15 > appleY) {
+        snake.y + 15 > appleY
+    ) {
         ctx.clearRect(appleX, appleY, 15, 15)
-        appleArray.length = 0
-        appleIsPresent = null
+        createApple()
         score = score + 1
         document.getElementById('score').innerText = score
     }
 }
+
+// if the snake eats the apple
+// check direction of snake
+// add new x and y values to snakeBody array
+// add new snake body block 'behind' snake head
 
