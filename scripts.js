@@ -6,42 +6,52 @@ document.addEventListener("keydown", moveSnakeKeys, false)
 let appleX
 let appleY
 let score = 0
-let snakeBody = [
-    { x: 50, y: 25, color: 'green' }
-]
 
 createApple()
 
 class Snake {
     constructor() {
-        this.x = 50
-        this.y = canvas.height / 2
-        this.snakeSpeed = 1
+        this.body = [
+            { x: 50, y: canvas.height / 2 },
+            { x: 34, y: canvas.height / 2 },
+            { x: 18, y: canvas.height / 2 }
+        ]
+        this.snakeSpeed = 15
         this.color = 'green'
         this.snakeSize = 15
     }
 
     drawSnake() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.snakeSize, this.snakeSize)
+        for (let i = 0; i < this.body.length; i++) {
+            ctx.fillRect(this.body[i].x, this.body[i].y, this.snakeSize, this.snakeSize)
+        }
         ctx.fill()
     }
 
     updateSnake() {
         if (snakeDirection === "right") {
-            this.x += this.snakeSpeed
+            for (let i = 0; i < this.body.length; i++) {
+                this.body[i].x += this.snakeSpeed
+            }
         } else if (snakeDirection === 'down') {
-            this.y += this.snakeSpeed
+            for (let i = 0; i < this.body.length; i++) {
+                this.body[i].y += this.snakeSpeed
+            }
         } else if (snakeDirection === 'left') {
-            this.x -= this.snakeSpeed
+            for (let i = 0; i < this.body.length; i++) {
+                this.body[i].x -= this.snakeSpeed
+            }
         } else if (snakeDirection === 'up') {
-            this.y -= this.snakeSpeed
+            for (let i = 0; i < this.body.length; i++) {
+                this.body[i].y -= this.snakeSpeed
+            }
         }
         this.drawSnake()
 
-        if (this.x > canvas.width - this.snakeSize || this.x < 0) {
+        if (this.body[0].x > canvas.width - this.snakeSize || this.body[0].x < 0) {
             alert('Game Over!')
-        } else if (this.y > canvas.height - this.snakeSize || this.y < 0) {
+        } else if (this.body[0].y > canvas.height - this.snakeSize || this.body[0].y < 0) {
             alert('Game Over!')
         }
     }
@@ -50,7 +60,6 @@ class Snake {
 const snake = new Snake()
 
 function animate() {
-    requestAnimationFrame(animate)
     ctx.fillStyle = 'black'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     snake.updateSnake()
@@ -60,7 +69,7 @@ function animate() {
     updateScore()
 }
 
-animate()
+setInterval(animate, 200)
 
 function moveSnakeKeys(e) {
     if (e.code === "ArrowRight" && snakeDirection != "left") {
@@ -79,20 +88,23 @@ function moveSnakeKeys(e) {
 }
 
 function createApple() {
-    appleX = Math.floor((Math.random() * (canvas.width - 20)))
-    appleY = Math.floor((Math.random() * (canvas.height - 20)))
+    appleX = Math.floor((Math.random() * (canvas.width - 15)))
+    appleY = Math.floor((Math.random() * (canvas.height - 15)))
 }
 
 function updateScore() {
-    if (snake.x < appleX + 15 &&
-        snake.x + 15 > appleX &&
-        snake.y < appleY + 15 &&
-        snake.y + 15 > appleY
+    if (snake.body[0].x < appleX + 15 &&
+        snake.body[0].x + 15 > appleX &&
+        snake.body[0].y < appleY + 15 &&
+        snake.body[0].y + 15 > appleY
     ) {
         ctx.clearRect(appleX, appleY, 15, 15)
         createApple()
         score = score + 1
         document.getElementById('score').innerText = score
+        let xLength = snake.body[snake.body.length - 1].x - 16
+        let yLength = snake.body[snake.body.length - 1].y
+        snake.body.push({ x: xLength, y: yLength })
     }
 }
 
@@ -100,4 +112,3 @@ function updateScore() {
 // check direction of snake
 // add new x and y values to snakeBody array
 // add new snake body block 'behind' snake head
-
