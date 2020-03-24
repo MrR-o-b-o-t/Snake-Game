@@ -8,12 +8,10 @@ let score = 0
 let snakeDirection;
 let grid = 15
 let gameIsOver = false;
+ctx.font = 'Press Start 2P'
 
 function handleMouseClick() {
     if (gameIsOver) {
-        // ctx.fillStyle = "White"
-        // ctx.font = "15px Arial"
-        // ctx.fillText(`Game Over! You scored ${score} points! Click to continue.`, 100, 100)
         gameIsOver = false
         score = 0
         document.getElementById('score').innerText = 0
@@ -21,7 +19,7 @@ function handleMouseClick() {
 }
 
 createApple()
-canvas.addEventListener("mousedown", handleMouseClick)
+window.addEventListener("keydown", handleMouseClick)
 
 class Snake {
     constructor() {
@@ -138,8 +136,12 @@ function gameOver() {
 
 function snakeWallCollision() {
     if (snake.body[0].x > canvas.width - snake.snakeSpeed + 10 || snake.body[0].x < 0 - 1) {
+        let wallSound = new Audio("sounds/wallSound.ogg")
+        wallSound.play()
         gameIsOver = true
     } else if (snake.body[0].y > canvas.height - snake.snakeSpeed + 10 || snake.body[0].y < 0 - 10) {
+        let wallSound = new Audio("sounds/wallSound.ogg")
+        wallSound.play()
         gameIsOver = true
     }
 }
@@ -151,6 +153,8 @@ function snakeCollision() {
         let snakeBodyY = snake.body[i].y
         let snakeBodyX = snake.body[i].x
         if (x == snakeBodyX && y == snakeBodyY) {
+            let wallSound = new Audio("sounds/wallSound.ogg")
+            wallSound.play()
             gameIsOver = true
         }
     }
@@ -158,8 +162,13 @@ function snakeCollision() {
 
 function resetGame(e) {
     if (gameIsOver) {
+        let img = new Image()
+        img.src = 'images/gameOver.PNG'
+        ctx.drawImage(img, 0, 0)
         ctx.fillStyle = "White"
-        ctx.font = "20px Arial"
-        ctx.fillText(`Game Over! You score was ${score}! Click anywhere to continue`, 25, 100)
+        ctx.font = "20px 'Press Start 2P'"
+        ctx.fillText(`Game Over!`, 200, 60)
+        ctx.fillText(`You score was ${score}!`, 140, 100)
+        ctx.fillText(`Press any key to continue.`, 50, 140)
     }
 }
