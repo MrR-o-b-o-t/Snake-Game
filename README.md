@@ -7,6 +7,7 @@ Snake game built with Vanilla JavaScript, Canvas, and HTML5.
 
 _Snake game built with Vanilla JavaScript, Canvas, and HTML5 and zero tutorials!._
 <br>
+<br>
 See it here: https://web-dev-jr.github.io/Snake-Game/
 <br>
 <br>
