@@ -10,7 +10,7 @@ _Snake game built with Vanilla JavaScript, Canvas, and HTML5 and zero tutorials!
 See it here: https://web-dev-jr.github.io/Snake-Game/
 <br>
 <br>
-<img src="images/snakeGame.PNG">
+<image src="images/snakeGame.PNG">
   
 ## Summary
 
